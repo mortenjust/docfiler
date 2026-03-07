@@ -15,45 +15,38 @@ Requires [Claude Code](https://claude.ai/claude-code) for classification (`claud
 
 ## How it works
 
+```mermaid
+flowchart TD
+    scan(["IMG_0472.pdf — scan from phone"])
+
+    scan --> ocr["1 · OCR → searchable PDF/A"]
+    ocr --> read["2 · Read first page"]
+    read --> triage{"3 · Business\nor Personal?"}
+
+    triage -->|Business| biz{"4 · Pick folder"}
+    triage -.->|Personal| per{"4 · Pick folder"}
+
+    biz -.-> c1["Contracts/"]
+    biz ==>|match| c2["Contractors/"]
+    biz -.-> c3["Correspondence/"]
+    biz -.-> c4["Invoices/"]
+
+    per -.-> p1["Finance/"]
+    per -.-> p2["Health/"]
+    per -.-> p3["Insurance/"]
+    per -.-> p4["Home/"]
+
+    c2 ==> filed["5 · Rename + move"]
+
+    filed ==> final["Contractors / 2026 /\n2026-02-15 - Jane Smith - Invoice Logo Design.pdf"]
+
+    style scan fill:#ffd,stroke:#aa0
+    style final fill:#dfd,stroke:#0a0
 ```
-  IMG_4382.pdf                  A badly named scan from your phone
-       │
-       ▼
-┌─────────────┐
-│  Scan Inbox │                 triage mode
-│  docfiler   │
-└──────┬──────┘
-       │  1. OCR → searchable PDF/A
-       │  2. Extract text: "AHV Beiträge 2026..."
-       │  3. AI classifies: "Business"
-       │  4. AI names: "2026-01-15 - AHV - Annual Contribution Notice.pdf"
-       │
-       ├──────────────────────────────────────────────┐
-       ▼                                              ▼
-  Processed/                                    Business Inbox
-  Business - 2026-01-15 - AHV -                 Business - 2026-01-15 - AHV -
-  Annual Contribution Notice.pdf                 Annual Contribution Notice.pdf
-  (archived original)                                 │
-                                                      ▼
-                                               ┌─────────────┐
-                                               │   Business   │  file mode
-                                               │   docfiler   │
-                                               └──────┬──────┘
-                                                      │  1. Text already extracted
-                                                      │  2. AI picks folder:
-                                                      │     Correspondence/AHV/2026/Received
-                                                      │  3. AI names:
-                                                      │     2026-01-15 - AHV -
-                                                      │     Annual Contribution Notice.pdf
-                                                      ▼
-                                               Correspondence/
-                                                 AHV Social Insurance/
-                                                   2026/
-                                                     Received/
-                                                       2026-01-15 - AHV -
-                                                       Annual Contribution Notice.pdf
-                                                       ✓ done
-```
+
+> A badly named phone scan gets OCR'd, classified as a business document,
+> matched to the Contractors folder, renamed, and filed — in two `docfiler process` runs.
+> The first run (triage) routes it to the right inbox. The second run (file) puts it in the right folder.
 
 ## Setup
 
