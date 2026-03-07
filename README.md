@@ -5,14 +5,13 @@ Drop documents into a folder. AI reads them, names them, and files them.
 ## Install
 
 ```bash
-pip3 install -e ~/code/docfiler
-```
-
-Requires [ocrmypdf](https://ocrmypdf.readthedocs.io/) and [tesseract](https://github.com/tesseract-ocr/tesseract) for OCR, and [claude](https://claude.ai/claude-code) for classification.
-
-```bash
 brew install ocrmypdf tesseract tesseract-lang
+git clone https://github.com/mortenjust/docfiler.git
+cd docfiler
+pip3 install .
 ```
+
+Requires [Claude Code](https://claude.ai/claude-code) for classification (`claude` must be in your PATH).
 
 ## Setup
 
