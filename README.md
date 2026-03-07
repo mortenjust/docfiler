@@ -13,6 +13,48 @@ pip3 install .
 
 Requires [Claude Code](https://claude.ai/claude-code) for classification (`claude` must be in your PATH).
 
+## How it works
+
+```
+  IMG_4382.pdf                  A badly named scan from your phone
+       │
+       ▼
+┌─────────────┐
+│  Scan Inbox │                 triage mode
+│  docfiler   │
+└──────┬──────┘
+       │  1. OCR → searchable PDF/A
+       │  2. Extract text: "AHV Beiträge 2026..."
+       │  3. AI classifies: "Business"
+       │  4. AI names: "2026-01-15 - AHV - Annual Contribution Notice.pdf"
+       │
+       ├──────────────────────────────────────────────┐
+       ▼                                              ▼
+  Processed/                                    Business Inbox
+  Business - 2026-01-15 - AHV -                 Business - 2026-01-15 - AHV -
+  Annual Contribution Notice.pdf                 Annual Contribution Notice.pdf
+  (archived original)                                 │
+                                                      ▼
+                                               ┌─────────────┐
+                                               │   Business   │  file mode
+                                               │   docfiler   │
+                                               └──────┬──────┘
+                                                      │  1. Text already extracted
+                                                      │  2. AI picks folder:
+                                                      │     Correspondence/AHV/2026/Received
+                                                      │  3. AI names:
+                                                      │     2026-01-15 - AHV -
+                                                      │     Annual Contribution Notice.pdf
+                                                      ▼
+                                               Correspondence/
+                                                 AHV Social Insurance/
+                                                   2026/
+                                                     Received/
+                                                       2026-01-15 - AHV -
+                                                       Annual Contribution Notice.pdf
+                                                       ✓ done
+```
+
 ## Setup
 
 Put a `docfiler.yaml` in any folder you want to use as an inbox. There are two modes:
